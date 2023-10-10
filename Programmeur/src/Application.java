@@ -17,7 +17,7 @@ import java.net.Socket;
  * mais est bien sur susceptible de (nombreuses) améliorations
  */
 class Application {
-		private final static int PORT_SERVICE = 3000;
+		private final static int PORT_SERVICE = 4000;
 		private final static String HOST = "localhost"; 
 	
 	public static void main(String[] args) {
@@ -37,6 +37,7 @@ class Application {
 				System.out.println(line.replaceAll("##", "\n"));
 				sout.println(clavier.readLine());
 			}
+
 				
 			
 		}

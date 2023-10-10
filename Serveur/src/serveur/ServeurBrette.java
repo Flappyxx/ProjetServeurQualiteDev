@@ -28,7 +28,7 @@ public class ServeurBrette implements Runnable,AutoCloseable {
 				if(listen_socket.getLocalPort() == PORT_AMATEUR)
 					new Thread(new ServiceAmateur(listen_socket.accept())).start();
 				if(listen_socket.getLocalPort() == PORT_PROGRAMMEUR)
-					new Thread(new ServiceAmateur(listen_socket.accept())).start();
+					new Thread(new ServiceProgrammeur(listen_socket.accept())).start();
 			}
 		}
 		catch (IOException e) { 
