@@ -1,4 +1,4 @@
-package bri;
+package serveur;
 
 
 import java.io.*;
@@ -6,11 +6,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.*;
 
 
-class ServiceBRi implements Runnable {
+class ServiceAmateur implements Runnable {
 	
 	private Socket client;
 	
-	ServiceBRi(Socket socket) {
+	ServiceAmateur(Socket socket) {
 		client = socket;
 	}
 
@@ -44,11 +44,6 @@ class ServiceBRi implements Runnable {
 	
 	protected void finalize() throws Throwable {
 		 client.close(); 
-	}
-
-	// lancement du service
-	public void start() {
-		(new Thread(this)).start();		
 	}
 
 }

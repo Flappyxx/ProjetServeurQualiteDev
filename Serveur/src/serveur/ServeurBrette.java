@@ -1,15 +1,17 @@
-package bri;
+package serveur;
 
 
 import java.io.*;
 import java.net.*;
 
 
-public class ServeurBRi implements Runnable {
+public class ServeurBrette implements Runnable,AutoCloseable {
 	private ServerSocket listen_socket;
+	private final static int PORT_AMATEUR = 3000;
+	private final static int PORT_PROGRAMMEUR = 4000;
 	
 	// Cree un serveur TCP - objet de la classe ServerSocket
-	public ServeurBRi(int port) {
+	public ServeurBrette(int port) {
 		try {
 			listen_socket = new ServerSocket(port);
 		} catch (IOException e) {
@@ -22,8 +24,12 @@ public class ServeurBRi implements Runnable {
 	// qui va la traiter.
 	public void run() {
 		try {
-			while(true)
-				new ServiceBRi(listen_socket.accept()).start();
+			while(true){
+				if(listen_socket.getLocalPort() == PORT_AMATEUR)
+					new Thread(new ServiceAmateur(listen_socket.accept())).start();
+				if(listen_socket.getLocalPort() == PORT_PROGRAMMEUR)
+					new Thread(new ServiceAmateur(listen_socket.accept())).start();
+			}
 		}
 		catch (IOException e) { 
 			try {this.listen_socket.close();} catch (IOException e1) {}
@@ -32,12 +38,8 @@ public class ServeurBRi implements Runnable {
 	}
 
 	 // restituer les ressources --> finalize
-	protected void finalize() throws Throwable {
+	public void close() {
 		try {this.listen_socket.close();} catch (IOException e1) {}
 	}
 
-	// lancement du serveur
-	public void lancer() {
-		(new Thread(this)).start();		
-	}
 }

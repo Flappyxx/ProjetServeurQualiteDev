@@ -1,6 +1,4 @@
-package bri;
-
-// rien à ajouter ici
+package serveur;
 
 public interface Service extends Runnable {
 }

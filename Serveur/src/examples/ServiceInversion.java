@@ -3,7 +3,7 @@ package examples;
 import java.io.*;
 import java.net.*;
 
-import bri.Service;
+import serveur.Service;
 
 // rien à ajouter ici
 public class ServiceInversion implements Service {

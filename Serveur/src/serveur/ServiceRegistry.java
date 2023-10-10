@@ -1,4 +1,4 @@
-package bri;
+package serveur;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
