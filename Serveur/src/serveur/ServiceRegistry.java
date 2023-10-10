@@ -10,9 +10,11 @@ public class ServiceRegistry {
 	// un Vector pour cette gestion est pratique
 
 	static {
-		servicesClasses = null;
+		servicesClasses = new ArrayList<>();
+		servicesStates = new ArrayList<>();
 	}
-	private static List<Class<?>> servicesClasses = new ArrayList<>();
+	private static List<Class<?>> servicesClasses ;
+	private static List<Boolean> servicesStates ;
 
 // ajoute une classe de service après contrôle de la norme BLTi
 	public static void addService(Class<?> classService) {
@@ -21,6 +23,7 @@ public class ServiceRegistry {
 		// si conforme, ajout au vector
 
 		servicesClasses.add(classService);
+		servicesStates.add(true);
 	}
 	
 // renvoie la classe de service (numService -1)	
