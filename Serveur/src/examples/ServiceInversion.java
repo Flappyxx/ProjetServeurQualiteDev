@@ -6,7 +6,7 @@ import java.net.*;
 import serveur.Service;
 
 // rien à ajouter ici
-public class ServiceInversion implements Service {
+public class ServiceInversion implements Service, AutoCloseable {
 	
 	private final Socket client;
 	
@@ -16,11 +16,11 @@ public class ServiceInversion implements Service {
 
 @Override
 	public void run() {
-		try {BufferedReader in = new BufferedReader (new InputStreamReader(client.getInputStream ( )));
+		try {
+			BufferedReader in = new BufferedReader (new InputStreamReader(client.getInputStream ( )));
 			PrintWriter out = new PrintWriter (client.getOutputStream ( ), true);
-
 			out.println("Tapez un texte à inverser");
-		
+			
 			String line = in.readLine();		
 	
 			String invLine = new String (new StringBuffer(line).reverse());
@@ -34,8 +34,12 @@ public class ServiceInversion implements Service {
 		}
 	}
 	
-	protected void finalize() throws Throwable {
-		 client.close(); 
+	public void close() {
+		 try {
+			client.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} 
 	}
 
 	public static String toStringue() {
