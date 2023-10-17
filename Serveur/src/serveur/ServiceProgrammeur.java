@@ -4,10 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.MalformedURLException;
-import java.net.Socket;
-import java.net.URL;
-import java.net.URLClassLoader;
+import java.net.*;
 
 public class ServiceProgrammeur implements Runnable,AutoCloseable{
 
@@ -35,7 +32,7 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
         try {
             BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
             PrintWriter out = new PrintWriter(client.getOutputStream(), true);
-
+            System.out.println("Programmeur connexion");
             //Ajout de la connexion du programmeur (username,password)
 
             while (true) {
@@ -64,7 +61,10 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
             }
         } catch (MalformedURLException e) {
             e.printStackTrace();
-        } catch (IOException e) {
+        }catch(SocketException e){
+            System.out.println("Connexion terminée");
+        }
+        catch (IOException e) {
             e.printStackTrace();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -74,7 +74,7 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
     }
 
     private void ftpChange(BufferedReader in, PrintWriter out) throws IOException {
-        out.println("Tapez le nouveau lien ftp : ");
+        out.print("Tapez le nouveau lien ftp : ");
         String url = in.readLine();
         urlcl = new URLClassLoader(new URL[]{new URL(url)});
         //catch une mauvaise url
@@ -82,6 +82,16 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
 
     private void desinstallation(BufferedReader in, PrintWriter out) {
         //afficher tout même désactivé
+        try{
+            StringBuilder sb = new StringBuilder();
+            sb.append(ServiceRegistry.printAllServices());
+            sb.append("Tapez le numéro du service à désinstaller : ");
+            out.print(sb);
+            int num = Integer.parseInt(in.readLine());
+            ServiceRegistry.desintaller(num);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void activation(BufferedReader in, PrintWriter out) {
@@ -93,7 +103,7 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
     }
 
     private void installation(BufferedReader in,PrintWriter out) throws IOException, ClassNotFoundException {
-        out.println("Tapez le nom de votre classe : ");
+        out.print("Tapez le nom de votre classe : ");
         String classeName = in.readLine();
         //Vérification de nom de package == user
         ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));

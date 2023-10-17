@@ -19,7 +19,7 @@ public class ServiceInversion implements Service, AutoCloseable {
 		try {
 			BufferedReader in = new BufferedReader (new InputStreamReader(client.getInputStream ( )));
 			PrintWriter out = new PrintWriter (client.getOutputStream ( ), true);
-			out.println("Tapez un texte à inverser");
+			out.print("Tapez un texte à inverser : ");
 			
 			String line = in.readLine();		
 	

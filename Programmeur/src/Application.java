@@ -41,7 +41,12 @@ class Application {
 				
 			
 		}
-		catch (IOException e) { System.err.println("Fin de la connexion"); }
+		catch(NullPointerException e){
+			System.out.println("Connexion terminée");
+		}
+		catch (IOException e) {
+			System.err.println("Serveur fermé");
+		}
 		// Refermer dans tous les cas la socket
 		try { if (s != null) s.close(); } 
 		catch (IOException e2) { ; }		

@@ -50,4 +50,26 @@ public class ServiceRegistry {
 		return result;
 	}
 
+	public static void desintaller(int num) {
+		servicesClasses.remove(num);
+		servicesStates.remove(num);
+	}
+
+	public static String printAllServices(){
+		String result = "Activités présentes :##";
+		for (Class<?> servicesClass : servicesClasses) {
+			try{
+				result += servicesClass.getMethod("toStringue").invoke(servicesClass);
+				result += "##";
+				;}
+			catch (NoSuchMethodException e){
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
 }
