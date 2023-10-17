@@ -94,11 +94,20 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
         }
     }
 
-    private void activation(BufferedReader in, PrintWriter out) {
+    private void activation(BufferedReader in, PrintWriter out) throws IOException, ClassNotFoundException {
         //afficher seulement désactivé
+    	out.print("Tapez le nom de votre classe à activé : ");
+    	String classeName = in.readLine();
+    	ServiceRegistry.activationService(urlcl.loadClass(classeName).asSubclass(Service.class));
+    	System.out.println(ServiceRegistry.toStringue(true));
+    	
     }
 
-    private void desactivation(BufferedReader in, PrintWriter out) {
+    private void desactivation(BufferedReader in, PrintWriter out) throws IOException, ClassNotFoundException {
+    	out.print("Tapez le nom de votre classe à desactivé : ");
+    	String classeName = in.readLine();
+    	ServiceRegistry.desactivationService(urlcl.loadClass(classeName).asSubclass(Service.class));
+    	System.out.println(ServiceRegistry.toStringue());
         //toStringue
     }
 

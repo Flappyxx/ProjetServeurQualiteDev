@@ -31,14 +31,62 @@ public class ServiceRegistry {
 		return (Class<? extends Service>) servicesClasses.get(numService);
 	}
 	
+	
+	public static void activationService(Class<?> classService) {
+		for(int i = 0; i < servicesClasses.size(); i++) {
+			if(servicesClasses.get(i).equals(classService)) {
+				servicesStates.set(i, true);
+			}
+		}
+	}
+	
+	public static void desactivationService(Class<?> classService) {
+		for(int i = 0; i < servicesClasses.size(); i++) {
+			if(servicesClasses.get(i).equals(classService)) {
+				servicesStates.set(i, false);
+			}
+		}
+	}
+	
 // liste les activités présentes
 	public static String toStringue()  {
 		String result = "Activités présentes :##";
-		for (Class<?> servicesClass : servicesClasses) {
+		for (int i = 0; i < servicesClasses.size(); i++) {
 			try{
-				result += servicesClass.getMethod("toStringue").invoke(servicesClass);
+				result += servicesClasses.get(i).getMethod("toStringue").invoke(servicesClasses);
+				result += servicesStates.get(i);
 				result += "##";
 			;}
+			catch (NoSuchMethodException e){
+				e.printStackTrace();
+			} catch (InvocationTargetException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+		}
+		return result;
+	}
+	
+	public static String toStringue(boolean val) {
+		String result = "";
+		if(val == true) {
+			result += "Activités désactivé présentes :##";
+		}
+		else {
+			result += "Activités désactivé présentes :##";
+		}
+		for(int i = 0; i < servicesStates.size(); i++) {
+			try{
+			if(servicesStates.get(i) == false) {
+				result += servicesClasses.get(i).getMethod("toStringue", boolean.class).invoke(servicesClasses);
+				result += "##";
+			}
+			else {
+				result += servicesClasses.get(i).getMethod("toStringue", boolean.class).invoke(servicesClasses);
+				result += "##";
+			}
+			}
 			catch (NoSuchMethodException e){
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
