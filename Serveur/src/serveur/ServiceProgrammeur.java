@@ -47,16 +47,22 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
                 switch(res){
                     case("1"):
                         installation(in,out);
+                        break;
                     case("2"):
                         desactivation(in,out);
+                        break;
                     case("3"):
                         activation(in,out);
+                        break;
                     case("4"):
                         desinstallation(in,out);
+                        break;
                     case("5"):
                         ftpChange(in,out);
+                        break;
                     case("q"):
                         close();
+                        break;
                 }
             }
         } catch (MalformedURLException e) {
@@ -74,49 +80,46 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
     }
 
     private void ftpChange(BufferedReader in, PrintWriter out) throws IOException {
-        out.print("Tapez le nouveau lien ftp : ");
+        out.println("Tapez le nouveau lien ftp : ");
         String url = in.readLine();
         urlcl = new URLClassLoader(new URL[]{new URL(url)});
         //catch une mauvaise url
     }
 
-    private void desinstallation(BufferedReader in, PrintWriter out) {
+    private void desinstallation(BufferedReader in, PrintWriter out) throws IOException{
         //afficher tout même désactivé
-        try{
-            StringBuilder sb = new StringBuilder();
-            sb.append(ServiceRegistry.printAllServices());
-            sb.append("Tapez le numéro du service à désinstaller : ");
-            out.print(sb);
-            int num = Integer.parseInt(in.readLine());
-            ServiceRegistry.desintaller(num);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        StringBuilder sb = new StringBuilder();
+        sb.append(ServiceRegistry.printAllServices());
+        sb.append("Tapez le numéro du service à désinstaller : ");
+        out.println(sb);
+        int num = Integer.parseInt(in.readLine());
+        ServiceRegistry.desintaller(num);
     }
 
     private void activation(BufferedReader in, PrintWriter out) throws IOException, ClassNotFoundException {
-        //afficher seulement désactivé
-    	out.print("Tapez le nom de votre classe à activé : ");
-    	String classeName = in.readLine();
-    	ServiceRegistry.activationService(urlcl.loadClass(classeName).asSubclass(Service.class));
-    	System.out.println(ServiceRegistry.toStringue(true));
+        StringBuilder sb = new StringBuilder();
+        sb.append(ServiceRegistry.toStringue(false));
+        sb.append("Tapez le nom de votre classe à activé : ");
+    	out.println(sb);
+    	int numClasse = Integer.parseInt(in.readLine());
+    	ServiceRegistry.activationService(numClasse);
     	
     }
 
     private void desactivation(BufferedReader in, PrintWriter out) throws IOException, ClassNotFoundException {
-    	out.print("Tapez le nom de votre classe à desactivé : ");
-    	String classeName = in.readLine();
-    	ServiceRegistry.desactivationService(urlcl.loadClass(classeName).asSubclass(Service.class));
-    	System.out.println(ServiceRegistry.toStringue());
-        //toStringue
+        StringBuilder sb = new StringBuilder();
+        sb.append(ServiceRegistry.toStringue(true));
+        sb.append("Tapez le nom de votre classe à desactivé : ");
+    	out.println(sb);
+        int numClasse = Integer.parseInt(in.readLine());
+    	ServiceRegistry.desactivationService(numClasse);
     }
 
     private void installation(BufferedReader in,PrintWriter out) throws IOException, ClassNotFoundException {
-        out.print("Tapez le nom de votre classe : ");
+        out.println("Tapez le nom de votre classe : ");
         String classeName = in.readLine();
         //Vérification de nom de package == user
         ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));
-        System.out.println(ServiceRegistry.toStringue());
     }
 
     @Override

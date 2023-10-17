@@ -1,5 +1,3 @@
-package src;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -37,9 +35,6 @@ class Application {
 				System.out.println(line.replaceAll("##", "\n"));
 				sout.println(clavier.readLine());
 			}
-
-				
-			
 		}
 		catch(NullPointerException e){
 			System.out.println("Connexion terminée");
