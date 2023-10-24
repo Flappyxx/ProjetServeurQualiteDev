@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class ServiceMessage {
 	private static Map<String, ArrayList<String>> messageMap;
@@ -31,5 +32,16 @@ public class ServiceMessage {
 		return str.toString();
 	}
 	
-	
+	public String toStringue() {
+		StringBuilder str = new StringBuilder();
+		for(Entry<String, ArrayList<String>> entry : messageMap.entrySet()) {
+		    str.append("Liste de message pour l'utilisateur " + entry.getKey() + " : ");
+		    for(int i = 0; i < messageMap.get(entry.getKey()).size(); i++){
+		    	str.append(messageMap.get(entry.getKey()).get(i));
+		    	str.append(" ");
+		    }
+		    str.append("##");
+		}		
+		return str.toString();
+	}
 }
