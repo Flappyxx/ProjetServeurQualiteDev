@@ -28,7 +28,17 @@ public class ServiceRegistry {
 	
 // renvoie la classe de service (numService -1)	
 	public static Class<? extends Service> getServiceClass(int numService) {
-		return (Class<? extends Service>) servicesClasses.get(numService);
+		int cpt = 0;
+		int i = 0;
+		for (boolean state : servicesStates) {
+			if(state){ //filtre les classes désactivées
+				cpt++;
+				if(cpt == numService)
+					return (Class<? extends Service>) servicesClasses.get(i);
+			}
+			i++;
+		}
+		return null;
 	}
 	
 	
@@ -99,6 +109,8 @@ public class ServiceRegistry {
 	public static int getServiceClassesSize() {
 		return servicesClasses.size();
 	}
+
+
 	public static String printAllServices(){
 		String result = "Activités présentes :##";
 		int i = 1 ;
@@ -118,5 +130,25 @@ public class ServiceRegistry {
 			}
 		}
 		return result;
+	}
+
+	public static int getServiceClassesDesacSize() {
+		int len = 0;
+		for (Boolean state : servicesStates) {
+			if(!state){
+				len++;
+			}
+		}
+		return len;
+	}
+
+	public static int getServiceClassesActivateSize() {
+		int len = 0;
+		for (Boolean state : servicesStates) {
+			if(state){
+				len++;
+			}
+		}
+		return len;
 	}
 }

@@ -55,7 +55,6 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
                 //5 : Changer le ftp
                 out.println("1 : Installation ##2 : Désactivation ##3 : Activation ##4 : Désintallation ##5 : Changer le ftp##Taper le numéro de l'action souhaité : ");
                 String res = in.readLine();
-                System.out.println(res);
                 switch(res){
                     case("1"):
                         installation(in,out);
@@ -111,7 +110,7 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
         out.println(sb);
         try {
         int num = Integer.parseInt(in.readLine());
-        if(num > 0 && num < ServiceRegistry.getServiceClassesSize()) {
+        if(num > 0 && num <= ServiceRegistry.getServiceClassesSize()) {
         	ServiceRegistry.desintaller(num);	
         }
         }
@@ -123,11 +122,11 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
     private void activation(BufferedReader in, PrintWriter out) throws IOException, ClassNotFoundException {
         StringBuilder sb = new StringBuilder();
         sb.append(ServiceRegistry.toStringue(false));
-        sb.append("Tapez le nom de votre classe à activé : ");
+        sb.append("Tapez le numéro de votre classe à activé : ");
     	out.println(sb);
     	try {
     	int numClasse = Integer.parseInt(in.readLine());
-    	if(numClasse > 0 && numClasse < ServiceRegistry.getServiceClassesSize()) {
+    	if(numClasse > 0 && numClasse <= ServiceRegistry.getServiceClassesDesacSize()) {
     		ServiceRegistry.activationService(numClasse);
     	}
     	}
@@ -140,11 +139,11 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
     private void desactivation(BufferedReader in, PrintWriter out) throws IOException, ClassNotFoundException {
         StringBuilder sb = new StringBuilder();
         sb.append(ServiceRegistry.toStringue(true));
-        sb.append("Tapez le nom de votre classe à desactivé : ");
+        sb.append("Tapez le numéro de votre classe à desactivé : ");
     	out.println(sb);
     	try {
         int numClasse = Integer.parseInt(in.readLine());
-        if(numClasse > 0 && numClasse < ServiceRegistry.getServiceClassesSize()) {
+        if(numClasse > 0 && numClasse <= ServiceRegistry.getServiceClassesActivateSize()) {
         	ServiceRegistry.desactivationService(numClasse);	
         }
     	}
@@ -154,14 +153,17 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
     }
 
     private void installation(BufferedReader in,PrintWriter out) throws IOException, ClassNotFoundException {
+        try{
         out.println("Tapez le nom de votre classe : ");
         String classeName = in.readLine();
         Class<?> serviceClass = urlcl.loadClass(classeName).asSubclass(Service.class);
-        //Vérification de nom de package == user
-        verificationClass(serviceClass);
 
-
-        ServiceRegistry.addService(serviceClass);
+        if(verificationClass(serviceClass))
+            ServiceRegistry.addService(serviceClass);
+        }
+        catch (ClassNotFoundException e){
+            e.printStackTrace();
+        }
     }
 
     private boolean verificationClass(Class<?> serviceClass) {
@@ -177,9 +179,8 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
             int modRun = run.getModifiers();
             if(!Modifier.isPublic(modRun))
                 return false;
-
             Method toStringue = serviceClass.getMethod("toStringue");
-            if(!(run.getReturnType() == String.class))
+            if(!(toStringue.getReturnType() == String.class))
                 return false;
             int modToStringue = toStringue.getModifiers();
             if(!Modifier.isPublic(modToStringue) || !Modifier.isStatic(modToStringue))

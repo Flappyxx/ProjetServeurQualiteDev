@@ -27,16 +27,17 @@ class Application {
 
 			BufferedReader sin = new BufferedReader (new InputStreamReader(s.getInputStream ( )));
 			PrintWriter sout = new PrintWriter (s.getOutputStream ( ), true);
-			BufferedReader clavier = new BufferedReader(new InputStreamReader(System.in));			
-		
+			BufferedReader clavier = new BufferedReader(new InputStreamReader(System.in));
+
 			System.out.println("Connecté au serveur " + s.getInetAddress() + ":"+ s.getPort());
-			
+
 			String line;
 			while(true){
 				line = sin.readLine();
 				System.out.println(line.replaceAll("##", "\n"));
 				sout.println(clavier.readLine());
 			}
+
 				
 			
 		}
