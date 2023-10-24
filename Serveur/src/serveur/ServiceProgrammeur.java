@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.net.*;
 
 public class ServiceProgrammeur implements Runnable,AutoCloseable{
@@ -35,8 +37,17 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
             System.out.println("Programmeur connexion");
             //Ajout de la connexion du programmeur (username,password)
 
+            while(true){ //vérfie que le mdp est égal au nom d'utilisateur en majuscule
+                out.println("username :");
+                username = in.readLine();
+                out.println("password :");
+                String password = in.readLine();
+                if(username.toUpperCase().equals(password)){
+                    break;
+                }
+            }
+
             while (true) {
-                //Afficher ses trois options
                 //1 : Installation
                 //2 : Désactivation
                 //3 : Activation
@@ -118,8 +129,46 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
     private void installation(BufferedReader in,PrintWriter out) throws IOException, ClassNotFoundException {
         out.println("Tapez le nom de votre classe : ");
         String classeName = in.readLine();
+        Class<?> serviceClass = urlcl.loadClass(classeName).asSubclass(Service.class);
         //Vérification de nom de package == user
-        ServiceRegistry.addService(urlcl.loadClass(classeName).asSubclass(Service.class));
+        verificationClass(serviceClass);
+
+
+        ServiceRegistry.addService(serviceClass);
+    }
+
+    private boolean verificationClass(Class<?> serviceClass) {
+        if(!username.equals(serviceClass.getPackageName()))
+            return false;
+        //vérifier la méthode run et toStringue
+
+        //vérfier le constructeur avec socket
+        try {
+            Method run = serviceClass.getMethod("run");
+            if(!(run.getReturnType() == void.class))
+                return false;
+            int modRun = run.getModifiers();
+            if(!Modifier.isPublic(modRun))
+                return false;
+
+            Method toStringue = serviceClass.getMethod("toStringue");
+            if(!(run.getReturnType() == String.class))
+                return false;
+            int modToStringue = toStringue.getModifiers();
+            if(!Modifier.isPublic(modToStringue) || !Modifier.isStatic(modToStringue))
+                return false;
+
+            serviceClass.getConstructor(Socket.class);
+        } catch (NoSuchMethodException e) {
+            return false;
+        }
+
+        //vérfier que Service est implementé
+        for (Class<?> interfaces : serviceClass.getInterfaces()) {
+            if(interfaces == Service.class)
+                return true;
+        }
+        return false;
     }
 
     @Override
