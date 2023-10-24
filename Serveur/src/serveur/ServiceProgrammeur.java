@@ -55,6 +55,7 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
                 //5 : Changer le ftp
                 out.println("1 : Installation ##2 : Désactivation ##3 : Activation ##4 : Désintallation ##5 : Changer le ftp##Taper le numéro de l'action souhaité : ");
                 String res = in.readLine();
+                System.out.println(res);
                 switch(res){
                     case("1"):
                         installation(in,out);
@@ -92,8 +93,13 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
 
     private void ftpChange(BufferedReader in, PrintWriter out) throws IOException {
         out.println("Tapez le nouveau lien ftp : ");
+        try {
         String url = in.readLine();
         urlcl = new URLClassLoader(new URL[]{new URL(url)});
+        }
+        catch(Exception e) {
+        	e.printStackTrace();   	
+        }
         //catch une mauvaise url
     }
 
@@ -103,8 +109,15 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
         sb.append(ServiceRegistry.printAllServices());
         sb.append("Tapez le numéro du service à désinstaller : ");
         out.println(sb);
+        try {
         int num = Integer.parseInt(in.readLine());
-        ServiceRegistry.desintaller(num);
+        if(num > 0 && num < ServiceRegistry.getServiceClassesSize()) {
+        	ServiceRegistry.desintaller(num);	
+        }
+        }
+        catch(NumberFormatException e) {
+        	e.printStackTrace();
+        }
     }
 
     private void activation(BufferedReader in, PrintWriter out) throws IOException, ClassNotFoundException {
@@ -112,8 +125,15 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
         sb.append(ServiceRegistry.toStringue(false));
         sb.append("Tapez le nom de votre classe à activé : ");
     	out.println(sb);
+    	try {
     	int numClasse = Integer.parseInt(in.readLine());
-    	ServiceRegistry.activationService(numClasse);
+    	if(numClasse > 0 && numClasse < ServiceRegistry.getServiceClassesSize()) {
+    		ServiceRegistry.activationService(numClasse);
+    	}
+    	}
+        catch(NumberFormatException e) {
+        	e.printStackTrace();
+        }
     	
     }
 
@@ -122,8 +142,15 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
         sb.append(ServiceRegistry.toStringue(true));
         sb.append("Tapez le nom de votre classe à desactivé : ");
     	out.println(sb);
+    	try {
         int numClasse = Integer.parseInt(in.readLine());
-    	ServiceRegistry.desactivationService(numClasse);
+        if(numClasse > 0 && numClasse < ServiceRegistry.getServiceClassesSize()) {
+        	ServiceRegistry.desactivationService(numClasse);	
+        }
+    	}
+    	catch(NumberFormatException e) {
+    		
+    	}
     }
 
     private void installation(BufferedReader in,PrintWriter out) throws IOException, ClassNotFoundException {

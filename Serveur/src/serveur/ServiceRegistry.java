@@ -96,6 +96,9 @@ public class ServiceRegistry {
 		servicesStates.remove(num);
 	}
 
+	public static int getServiceClassesSize() {
+		return servicesClasses.size();
+	}
 	public static String printAllServices(){
 		String result = "Activités présentes :##";
 		int i = 1 ;
