@@ -79,13 +79,15 @@ public class ServiceMessagerie implements Service, AutoCloseable{
 	}
 
 	public String getMessages(String login) {
+
+		if(this.messageMap.get(login) == null){
+			return "Aucun message";
+		}
 		StringBuilder str = new StringBuilder("Liste de messages : ##");
 		for(int i = 0; i < this.messageMap.get(login).size(); i++) {
 			str.append(this.messageMap.get(login).get(i));
 			str.append("##");
 		}
-
-
 		return str.toString();
 	}
 
