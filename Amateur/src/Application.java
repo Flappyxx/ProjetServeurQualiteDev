@@ -34,6 +34,12 @@ class Application {
 			String line;
 			while(true){
 				line = sin.readLine();
+				if(line.substring(line.length()-3).equals("+++")){
+					line = line.substring(0,line.length()-3);
+					System.out.println(line.replaceAll("##", "\n"));
+					line = sin.readLine();
+				}
+
 				System.out.println(line.replaceAll("##", "\n"));
 				sout.println(clavier.readLine());
 			}

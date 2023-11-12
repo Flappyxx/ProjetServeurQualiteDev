@@ -8,7 +8,7 @@ import java.net.Socket;
 
 import serveur.Service;
 
-public class ServicePalindrome  implements Service, AutoCloseable {
+public class ServicePalindrome  implements Service {
 
 	private final Socket client;
 	
@@ -24,30 +24,21 @@ public class ServicePalindrome  implements Service, AutoCloseable {
 
 			out.println("Tapez un mot/un texte pour savoir si c'est un palindrome : ");
 
-			String line = in.readLine();
+			String line = in.readLine().trim();
 
-			boolean invLine = new StringBuffer(line).reverse().equals(line);
+			boolean invLine = new String(new StringBuffer(line).reverse()).equals(line);
 			 
 			if(invLine) {
-				out.println("Le mot " + line + " est un palindrome");
+				out.println("Le mot " + line + " est un palindrome+++");
 			}
 			else {
-				out.println("Le mot " + line + " n'est pas un palindrome");
+				out.println("Le mot " + line + " n'est pas un palindrome+++");
 			}
 
-			client.close();
 		}
 		catch (IOException e) {
 			//Fin du service d'inversion
 		}
-	}
-	
-	public void close() {
-		 try {
-			client.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
 	}
 
 	public static String toStringue() {

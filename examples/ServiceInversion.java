@@ -6,7 +6,7 @@ import java.net.*;
 import serveur.Service;
 
 // rien à ajouter ici
-public class ServiceInversion implements Service, AutoCloseable {
+public class ServiceInversion implements Service {
 	
 	private final Socket client;
 	
@@ -26,21 +26,12 @@ public class ServiceInversion implements Service, AutoCloseable {
 
 			String invLine = new String (new StringBuffer(line).reverse());
 
-			out.println(invLine);
+			out.println(invLine + "+++");
 
-			client.close();
 		}
 		catch (IOException e) {
 			//Fin du service d'inversion
 		}
-	}
-	
-	public void close() {
-		 try {
-			client.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
 	}
 
 	public static String toStringue() {

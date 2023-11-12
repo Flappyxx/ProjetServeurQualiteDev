@@ -23,8 +23,9 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
     public void init(){
         // URLClassLoader sur ftp
         try {
-            if(urlcl == null)
+            if(urlcl == null){
                 urlcl = new URLClassLoader(new URL[]{new URL("ftp://localhost:2121/")});
+            }
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -76,10 +77,12 @@ public class ServiceProgrammeur implements Runnable,AutoCloseable{
                         break;
                 }
             }
-        } catch (MalformedURLException e) {
+        }
+        catch (MalformedURLException e) {
             e.printStackTrace();
-        }catch(SocketException e){
-            System.out.println("Connexion terminée");
+        }
+        catch(SocketException e){
+            System.out.println("Programmeur déconnexion");
         }
         catch (IOException e) {
             e.printStackTrace();

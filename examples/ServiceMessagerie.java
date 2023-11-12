@@ -11,7 +11,7 @@ import java.util.Map;
 
 import serveur.Service;
 
-public class ServiceMessagerie implements Service, AutoCloseable{
+public class ServiceMessagerie implements Service {
 	private final Socket client;
 	private static Map<String, ArrayList<String>> messageMap;
 
@@ -29,18 +29,17 @@ public class ServiceMessagerie implements Service, AutoCloseable{
 			BufferedReader in = new BufferedReader (new InputStreamReader(client.getInputStream ( )));
 			PrintWriter out = new PrintWriter (client.getOutputStream ( ), true);
 
-			while(true) {
-				out.println("1: Consultation des messages ## 2: Envoie d'un message");
-				String res = in.readLine();
-				switch (res) {
-					case "1":
-						consultationMessage(in,out);
-						break;
-					case "2":
-						envoieMessage(in,out);
-						break;
-				}
+			out.println("1: Consultation des messages ##2: Envoie d'un message");
+			String res = in.readLine();
+			switch (res) {
+				case "1":
+					consultationMessage(in,out);
+					break;
+				case "2":
+					envoieMessage(in,out);
+					break;
 			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -53,18 +52,13 @@ public class ServiceMessagerie implements Service, AutoCloseable{
 		out.println("Entrez votre message : ");
 		String message = in.readLine();
 		addMessage(nomDestinataire,message);
+		out.println("Message envoyé+++");
 	}
 
 	private void consultationMessage(BufferedReader in, PrintWriter out) throws IOException {
 		out.println("Entrez votre pseudo :");
 		String pseudo = in.readLine();
-		out.println(getMessages(pseudo) + "Faites une entrée clavier pour revenir à l'accueil");
-		in.readLine();
-	}
-
-	@Override
-	public void close() throws Exception {
-		client.close();
+		out.println(getMessages(pseudo) + "+++");
 	}
 
 	public void addMessage(String login, String message) {

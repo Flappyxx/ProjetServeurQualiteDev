@@ -6,7 +6,7 @@ import java.net.*;
 import serveur.Service;
 
 // rien à ajouter ici
-public class ServiceCalculatrice implements Service, AutoCloseable {
+public class ServiceCalculatrice implements Service{
 	
 	private final Socket client;
 	
@@ -20,9 +20,12 @@ public class ServiceCalculatrice implements Service, AutoCloseable {
 			BufferedReader in = new BufferedReader (new InputStreamReader(client.getInputStream ( )));
 			PrintWriter out = new PrintWriter (client.getOutputStream ( ), true);
 
-			while(true) {
-				out.println("1: Addition ## 2: Soustraction ## 3: Multiplication ## 4: Division");
+			boolean ok = false;
+
+			while(!ok) {
+				out.println("1: Addition ##2: Soustraction ##3: Multiplication ##4: Division");
 				String res = in.readLine();
+				ok = true;
 				switch (res) {
 					case "1":
 						operationMessage(in,out,"+");
@@ -36,7 +39,10 @@ public class ServiceCalculatrice implements Service, AutoCloseable {
 					case "4":
 						operationMessage(in,out, "/");
 						break;
+					default :
+						ok = false;
 				}
+
 		}
 		}
 		catch (IOException e) {
@@ -50,14 +56,14 @@ public class ServiceCalculatrice implements Service, AutoCloseable {
 			int operande1 = Integer.parseInt(in.readLine());
 			out.println("Entrez le deuxième operande :");
 			int operande2 = Integer.parseInt(in.readLine());
-			out.println(calculOperation(operande1, operande2, operation));
+			out.println(calculOperation(operande1, operande2, operation) + "+++");
 		} catch (NumberFormatException | IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	private int calculOperation(int operande1, int operande2, String operation) {
-		int res = 0;
+	private float calculOperation(int operande1, int operande2, String operation) {
+		float res = 0;
 		if(operation.equals("+")) {
 			res = operande1 + operande2;
 		}
@@ -68,17 +74,9 @@ public class ServiceCalculatrice implements Service, AutoCloseable {
 			res = operande1 * operande2;
 		}
 		if(operation.equals("/")) {
-			res = operande1 / operande2;
+			res = (float) operande1/ operande2 ;
 		}
 		return res;
-	}
-
-	public void close() {
-		 try {
-			client.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} 
 	}
 
 	public static String toStringue() {
